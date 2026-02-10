@@ -1,0 +1,9 @@
+#
+# test11.txt - Gestion des erreurs
+#
+commandebidon
+SLEEP 1
+ls /repertoire_inexistant_xyz
+SLEEP 1
+quit
+WAIT

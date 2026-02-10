@@ -1,0 +1,9 @@
+#
+# test07.txt - Redirection d'entree (<)
+#
+echo contenu du fichier > /tmp/test_shell_in.txt
+SLEEP 1
+cat < /tmp/test_shell_in.txt
+SLEEP 1
+quit
+WAIT

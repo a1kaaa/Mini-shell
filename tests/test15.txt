@@ -1,0 +1,18 @@
+#
+# test15.txt - Signal SIGTSTP (Ctrl+Z) suspend un processus fg
+# puis fg pour le reprendre et INT pour le terminer
+#
+/bin/sleep 60
+SLEEP 1
+TSTP
+SLEEP 2
+jobs
+SLEEP 1
+fg %1
+SLEEP 1
+INT
+SLEEP 1
+echo shell vivant apres Ctrl+Z puis fg puis Ctrl+C
+SLEEP 1
+quit
+WAIT

@@ -1,0 +1,9 @@
+#
+# test09.txt - Pipe multiple (3+ commandes)
+#
+echo un deux trois quatre cinq | xargs -n1 | sort | head -3
+SLEEP 1
+ls -la | grep -v total | wc -l
+SLEEP 1
+quit
+WAIT

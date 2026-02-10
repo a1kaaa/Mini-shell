@@ -1,0 +1,13 @@
+#
+# test18.txt - stop : suspendre un job en arriere-plan
+#
+/bin/sleep 60 &
+SLEEP 1
+jobs
+SLEEP 1
+stop %1
+SLEEP 1
+jobs
+SLEEP 1
+quit
+WAIT

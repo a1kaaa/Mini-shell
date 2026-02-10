@@ -1,0 +1,11 @@
+#
+# test06.txt - Redirection de sortie (> et >>)
+#
+echo premiere ligne > /tmp/test_shell_redir.txt
+SLEEP 1
+echo deuxieme ligne >> /tmp/test_shell_redir.txt
+SLEEP 1
+cat /tmp/test_shell_redir.txt
+SLEEP 1
+quit
+WAIT

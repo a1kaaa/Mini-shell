@@ -1,0 +1,14 @@
+#
+# test16.txt - Gestion des zombies (version robuste)
+# Lance plusieurs commandes en arriere-plan, attend, verifie ps
+#
+/bin/echo job1 &
+SLEEP 1
+/bin/echo job2 &
+SLEEP 1
+/bin/echo job3 &
+SLEEP 2
+/bin/ps -o pid,stat,comm
+SLEEP 1
+quit
+WAIT

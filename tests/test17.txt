@@ -1,0 +1,15 @@
+#
+# test17.txt - bg : reprendre un job stoppe en arriere-plan
+#
+sleep 10
+SLEEP 1
+TSTP
+SLEEP 2
+jobs
+SLEEP 1
+bg %1
+SLEEP 1
+jobs
+SLEEP 1
+quit
+WAIT

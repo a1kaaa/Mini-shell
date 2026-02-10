@@ -1,0 +1,15 @@
+#
+# test12.txt - Commandes integrees (cd, help)
+#
+help
+SLEEP 1
+cd /tmp
+SLEEP 1
+pwd
+SLEEP 1
+cd
+SLEEP 1
+pwd
+SLEEP 1
+quit
+WAIT

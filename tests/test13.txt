@@ -1,0 +1,11 @@
+#
+# test13.txt - Arriere-plan et jobs
+#
+sleep 5 &
+SLEEP 1
+sleep 7 &
+SLEEP 1
+jobs
+SLEEP 1
+quit
+WAIT

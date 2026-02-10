@@ -1,0 +1,9 @@
+#
+# test05.txt - Commande avec arguments
+#
+echo Hello World
+SLEEP 1
+ls -la
+SLEEP 1
+quit
+WAIT

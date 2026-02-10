@@ -1,0 +1,12 @@
+#
+# test14.txt - Signal SIGINT (Ctrl+C) sur processus foreground
+# Le shell doit survivre a Ctrl+C
+#
+/bin/sleep 30
+SLEEP 1
+INT
+SLEEP 1
+echo shell toujours vivant apres Ctrl+C
+SLEEP 1
+quit
+WAIT

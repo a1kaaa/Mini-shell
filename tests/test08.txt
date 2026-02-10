@@ -1,0 +1,9 @@
+#
+# test08.txt - Pipe simple (2 commandes)
+#
+echo aaa bbb ccc | wc -w
+SLEEP 1
+ls -la | grep src
+SLEEP 1
+quit
+WAIT

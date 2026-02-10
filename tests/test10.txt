@@ -1,0 +1,11 @@
+#
+# test10.txt - Pipe + redirections combinees
+#
+echo alpha bravo charlie > /tmp/test_shell_pipe.txt
+SLEEP 1
+cat < /tmp/test_shell_pipe.txt | xargs -n1 | sort > /tmp/test_shell_pipe_out.txt
+SLEEP 1
+cat /tmp/test_shell_pipe_out.txt
+SLEEP 1
+quit
+WAIT
