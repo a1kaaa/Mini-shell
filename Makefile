@@ -17,7 +17,7 @@ CPPFLAGS=-Iinclude
 #LIBS += -lsocket -lnsl -lrt
 LIBS+=-lpthread
 
-all: make_dir $(EXECDIR)/$(EXEC)
+all: fclean make_dir $(EXECDIR)/$(EXEC)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
 	$(CC) -c $(CFLAGS) $(CPPFLAGS) $< -o $@
