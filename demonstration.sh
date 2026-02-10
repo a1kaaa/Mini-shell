@@ -25,7 +25,7 @@ GRAS='\033[1m'
 DIM='\033[2m'
 RST='\033[0m'
 
-SHELL_BIN="./shell"
+SHELL_BIN="bin/shell"
 SDRIVER="./sdriver.pl"
 TESTS_DIR="./tests"
 
