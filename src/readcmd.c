@@ -9,6 +9,7 @@
 #include <limits.h>
 #include <string.h>
 #include "readcmd.h"
+#include "match.h"
 
 
 static void memory_error(void)
@@ -65,6 +66,93 @@ static char *readline(void)
 	} while (1);
 }
 
+/* Implémentation de la ~ tilde */
+static char *expand_tilde(char *word)
+{
+	if (word[0] != '~')
+		return word;
+
+	char *home = getenv("HOME");
+	if (!home)
+		return word;
+
+	/* "~" seul --> HOME */
+	if (word[1] == '\0') {
+		char *expanded = xmalloc(strlen(home) + 1);
+		strcpy(expanded, home);
+		free(word);
+		return expanded;
+	}
+
+	/* "~/quelquechose" --> HOME/quelquechose */
+	if (word[1] == '/') {
+		char *expanded = xmalloc(strlen(home) + strlen(word + 1) + 1);
+		strcpy(expanded, home);
+		strcat(expanded, word + 1);
+		free(word);
+		return expanded;
+	}
+	return word;
+}
+
+
+static int has_glob(const char *word)
+{
+	return strchr(word, '*') != NULL;
+}
+
+/* Expand glob patterns in the words array (e.g. *.c -> list of .c files) */
+static char **expand_globs(char **words)
+{
+	char **result = NULL;
+	size_t result_len = 0;
+
+	for (int i = 0; words[i] != 0; i++) {
+		if (!has_glob(words[i])) {
+			/* Keep the word as-is */
+			result = xrealloc(result, (result_len + 2) * sizeof(char *));
+			result[result_len++] = words[i];
+			result[result_len] = 0;
+			continue;
+		}
+		/* Word contains '*': expand it */
+		char **dir_content;
+		int dir_size;
+		if (list_dir(".", &dir_content, &dir_size) != 0) {
+			/* list_dir failed, keep the word as-is */
+			result = xrealloc(result, (result_len + 2) * sizeof(char *));
+			result[result_len++] = words[i];
+			result[result_len] = 0;
+			continue;
+		}
+		char **matched;
+		int match_size;
+		match_pattern(words[i], dir_content, dir_size, &matched, &match_size);
+
+		/* Free directory listing */
+		for (int j = 0; j < dir_size; j++)
+			free(dir_content[j]);
+		free(dir_content);
+
+		if (match_size == 0) {
+			/* No match: keep the literal pattern */
+			result = xrealloc(result, (result_len + 2) * sizeof(char *));
+			result[result_len++] = words[i];
+			result[result_len] = 0;
+			free(matched);
+		} else {
+			/* Replace the glob word with matched filenames */
+			free(words[i]);
+			result = xrealloc(result, (result_len + match_size + 1) * sizeof(char *));
+			for (int j = 0; j < match_size; j++)
+				result[result_len++] = matched[j];
+			result[result_len] = 0;
+			free(matched);
+		}
+	}
+	free(words);
+	return result;
+}
 
 /* Split the string in words, according to the simple shell grammar. */
 static char **split_in_words(char *line)
@@ -190,6 +278,15 @@ struct cmdline *readcmd(void)
 
 	words = split_in_words(line);
 	free(line);
+
+	/* Expansion du tilde */
+	for (i = 0; words[i] != 0; i++) {
+		if (words[i][0] == '~')
+			words[i] = expand_tilde(words[i]);
+	}
+
+	/* Expansion des globs (*.c, etc.) */
+	words = expand_globs(words);
 
 	if (!s)
 		static_cmdline = s = xmalloc(sizeof(struct cmdline));
