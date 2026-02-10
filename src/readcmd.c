@@ -66,6 +66,36 @@ static char *readline(void)
 }
 
 
+/* Expand ~ to HOME directory */
+static char *expand_tilde(char *word)
+{
+	if (word[0] != '~')
+		return word;
+
+	char *home = getenv("HOME");
+	if (!home)
+		return word;
+
+	/* "~" seul --> HOME */
+	if (word[1] == '\0') {
+		char *expanded = xmalloc(strlen(home) + 1);
+		strcpy(expanded, home);
+		free(word);
+		return expanded;
+	}
+
+	/* "~/quelquechose" --> HOME/quelquechose */
+	if (word[1] == '/') {
+		char *expanded = xmalloc(strlen(home) + strlen(word + 1) + 1);
+		strcpy(expanded, home);
+		strcat(expanded, word + 1);
+		free(word);
+		return expanded;
+	}
+	return word;
+}
+
+
 /* Split the string in words, according to the simple shell grammar. */
 static char **split_in_words(char *line)
 {
@@ -190,6 +220,12 @@ struct cmdline *readcmd(void)
 
 	words = split_in_words(line);
 	free(line);
+
+	/* Expansion du tilde */
+	for (i = 0; words[i] != 0; i++) {
+		if (words[i][0] == '~')
+			words[i] = expand_tilde(words[i]);
+	}
 
 	if (!s)
 		static_cmdline = s = xmalloc(sizeof(struct cmdline));
