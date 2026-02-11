@@ -4,17 +4,6 @@
 #include "match.h"
 #include "stdio.h"
 
-int is_pattern(char *word) 
-{
-    for(int i = 0; word[i] != '\0'; i++) 
-    {
-        if(word[i] == '*')
-            return 0;
-    }
-    return 1;
-}
-
-
 /* Recursive pattern matching supporting '*' wildcard */
 static int match(const char *pattern, const char *candidate, int p, int c)
 {
@@ -48,9 +37,8 @@ int list_dir(const char *dir, char ***content, int *size)
     struct dirent *entry;
     *content = NULL;
     *size = 0;
-
     while ((entry = readdir(d))) {
-        if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0 || entry->d_type == 4)
+        if (!strcmp(entry->d_name, "..") || !strcmp(entry->d_name, "."))
             continue;
         char **tmp = realloc(*content, sizeof(char *) * (*size + 1));
         if (!tmp) {
