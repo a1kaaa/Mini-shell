@@ -34,10 +34,11 @@ int main() {
 
         // Vérifier les jobs terminés en arrière-plan
         check_completed_bg_jobs();
-
-        printf(COL_VIOLET "Mini-shell >>> " COL_RESET);
+        char *prompt = get_prompt();
+        printf(COL_VIOLET "%s" COL_RESET, prompt);
+        
         fflush(stdout);
-
+        free(prompt);
         l = readcmd();
 
         // EOF (Ctrl+D)

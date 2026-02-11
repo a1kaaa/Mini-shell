@@ -93,5 +93,5 @@ void command_error(const char *cmd);
 int count_commands(char ***seq);
 char *trim_whitespace(char *str);
 void build_cmdline_str(struct cmdline *l, char *buf, size_t bufsize);
-
+char *get_prompt();
 #endif /* __SHELL_H__ */

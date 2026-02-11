@@ -77,6 +77,13 @@ static char **expand_globs(char **words)
 	char **result = NULL;
 	size_t result_len = 0;
 
+	/* Handle empty words array */
+	if (words == NULL) {
+		result = xmalloc(sizeof(char *));
+		result[0] = 0;
+		return result;
+	}
+
 	for (int i = 0; words[i] != 0; i++) {
 		if (!has_glob(words[i])) {
 			/* Keep the word as-is */
@@ -121,6 +128,12 @@ static char **expand_globs(char **words)
 		}
 	}
 	free(words);
+	
+	/* Ensure result is never NULL */
+	if (result == NULL) {
+		result = xmalloc(sizeof(char *));
+		result[0] = 0;
+	}
 	return result;
 }
 
@@ -268,7 +281,7 @@ struct cmdline *readcmd(void)
 		}
 		return static_cmdline = 0;
 	}
-
+	
 	cmd = xmalloc(sizeof(char *));
 	cmd[0] = 0;
 	cmd_len = 0;
@@ -279,6 +292,7 @@ struct cmdline *readcmd(void)
 	words = split_in_words(line);
 	free(line);
 	words = expand_globs(words);
+
 	/* Expansion du tilde */
 	for (i = 0; words[i] != 0; i++) {
 		if (words[i][0] == '~')

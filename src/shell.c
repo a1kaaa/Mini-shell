@@ -627,5 +627,49 @@ void execute_cmdline(struct cmdline *l) {
 }
 
 
+char *get_prompt() {
+    char path[MAXBUF];
+    if(!getcwd(path, MAXBUF))
+    {
+        fprintf(stderr, "Erreur: impossible de resoudre le repetoire courant\n");
+        exit(1);
+    }
+    int size_path = strlen(path);
+    char *user = getenv("USER");
+    if(!user)
+    {
+        fprintf(stderr, "Erreur: impossible d'obtenir l'usager\n");
+        exit(1);
+    }
+    int size_user = strlen(user);
+    char host[MAXBUF];
+    if(gethostname(host, MAXBUF))
+    {
+        perror("hostname");
+        exit(1);
+    }
+    int size_host = strlen(host);
 
+    char *prompt = malloc(size_path + size_user + size_host + 5);
+    int i = 1;
+    prompt[0] ='[';
+    for(int k = 0; k < size_user; k++)
+    {
+        prompt[i++] = user[k];
+    }
+    prompt[i++] = '@';
+    for(int k = 0; k < size_host; k++)
+    {
+        prompt[i++] = host[k];
+    }
+    prompt[i++] = ']';
+    for(int k = 0; k < size_path; k++)
+    {
+        prompt[i++] = path[k];
+    }
+    prompt[i++] = '$';
+    prompt[i] = '\0';
+
+    return prompt;
+}
 
