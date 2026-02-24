@@ -650,7 +650,7 @@ char *get_prompt() {
     }
     int size_host = strlen(host);
 
-    char *prompt = malloc(size_path + size_user + size_host + 5);
+    char *prompt = malloc(size_path + size_user + size_host + 6);
     int i = 1;
     prompt[0] ='[';
     for(int k = 0; k < size_user; k++)
@@ -668,6 +668,7 @@ char *get_prompt() {
         prompt[i++] = path[k];
     }
     prompt[i++] = '$';
+    prompt[i++] = ' ';
     prompt[i] = '\0';
 
     return prompt;
