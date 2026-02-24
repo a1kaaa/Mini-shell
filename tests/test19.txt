@@ -1,0 +1,22 @@
+# test19.txt - Vérifie l'expansion du joker * et du tilde ~
+
+# Créer un dossier de test et s'y placer
+mkdir -p /tmp/mini_shell_test
+cd /tmp/mini_shell_test
+
+# Créer des fichiers .c et un .txt
+echo foo > a.c
+echo bar > b.c
+echo baz > c.txt
+
+# Tester le wildcard: on attend 2 fichiers .c
+ls *.c | wc -l
+SLEEP 1
+
+# Tester le tilde: créer un fichier dans $HOME puis le lire
+echo tilde_content > ~/mini_shell_tilde_test.txt
+cat ~/mini_shell_tilde_test.txt
+rm ~/mini_shell_tilde_test.txt
+
+quit
+WAIT
